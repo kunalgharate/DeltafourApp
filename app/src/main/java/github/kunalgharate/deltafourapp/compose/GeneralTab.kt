@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -30,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.WhitePoint
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
@@ -38,6 +40,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import github.kunalgharate.deltafourapp.R
+import github.kunalgharate.deltafourapp.ui.theme.buttonBg
+import github.kunalgharate.deltafourapp.ui.theme.topBackground
 
 @Composable
 fun GeneralTab() {
@@ -105,8 +109,12 @@ fun table(title:String)
 
 @Composable
 fun SwitchWithIconExample() {
-    var checked by remember { mutableStateOf(true) }
+    var checked by remember { mutableStateOf(false) }
 
+
+  //  val switchColor = if (checked) Color.White else Color.White
+    val onIcon = painterResource(id = R.drawable.y)
+    val offIcon = painterResource(id = R.drawable.na)
 
 
     Switch(
@@ -114,16 +122,25 @@ fun SwitchWithIconExample() {
         onCheckedChange = {
             checked = it
         },
-        thumbContent = if (checked) {
-            {
-                Icon(
-                    painter = painterResource(id = R.drawable.y),
+        colors = SwitchDefaults.colors(
+          //  checkedThumbColor = switchColor,
+          //  uncheckedThumbColor = switchColor,
+
+            checkedTrackColor = topBackground,
+            uncheckedTrackColor = Color.Red,
+            uncheckedBorderColor = Color.Transparent,
+            uncheckedIconColor = Color.Red,
+            uncheckedThumbColor = Color.White,
+
+        ),
+        thumbContent =  {
+            Icon(
+                    painter = if (checked) onIcon else offIcon,
                     contentDescription = null,
-                    modifier = Modifier.size(SwitchDefaults.IconSize),
-                )
-            }
-        } else {
-            null
+                    modifier = Modifier.size(SwitchDefaults.IconSize)
+                    .background(Color.White, CircleShape)
+            )
+
         }
     )
 }

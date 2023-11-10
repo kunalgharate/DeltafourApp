@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import github.kunalgharate.deltafourapp.constants.AppStrings
 import github.kunalgharate.deltafourapp.ui.theme.lightGreyTitle
 
 
@@ -20,19 +21,19 @@ fun UserDeclarationView()
     Column {
         Text(
             modifier = Modifier.padding(10.dp),
-            text = "Select Permit Issuing Authority", color = lightGreyTitle,
+            text = AppStrings.SELECT_PERMIT_ISSUING_AUTHORITY, color = lightGreyTitle,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         )
-        dropDownMenu("Select Permit Issuing Authority")
+        dropDownMenu(AppStrings.SELECT_PERMIT_ISSUING_AUTHORITY)
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             modifier = Modifier.padding(10.dp),
-            text = "Select Receiver", color = lightGreyTitle,
+            text = AppStrings.SELECT_RECEIVER, color = lightGreyTitle,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         )
-        dropDownMenu("MySelf")
+        dropDownMenu(AppStrings.MYSELF)
     }
 
 }

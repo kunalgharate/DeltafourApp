@@ -3,6 +3,7 @@ package github.kunalgharate.deltafourapp.compose
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +25,7 @@ import github.kunalgharate.deltafourapp.ui.theme.topBackground
 @Composable
 fun CollapseButton(
     buttonText: String,
+    icon:Int,
     onClick: () -> Unit
 ) {
 
@@ -32,6 +34,9 @@ fun CollapseButton(
             .wrapContentSize()
             .background(Color.Transparent)
             .border(1.dp, topBackground)
+            .clickable {
+                onClick()
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -40,7 +45,7 @@ fun CollapseButton(
                 .padding(8.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.minus_circle_outlined),
+                painter = painterResource(id =icon),
                 contentDescription = ""
             )
             Spacer(modifier = Modifier.width(10.dp))

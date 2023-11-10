@@ -52,6 +52,7 @@ import github.kunalgharate.deltafourapp.compose.groupTitleWithSubTitle
 import github.kunalgharate.deltafourapp.compose.previewPpeSelectionView
 import github.kunalgharate.deltafourapp.compose.subTitle
 import github.kunalgharate.deltafourapp.compose.topBar
+import github.kunalgharate.deltafourapp.constants.AppStrings
 import github.kunalgharate.deltafourapp.ui.theme.DeltafourAppTheme
 import github.kunalgharate.deltafourapp.ui.theme.topBackground
 import kotlinx.coroutines.delay
@@ -84,6 +85,7 @@ fun DeltaFourUI()
         var isIsolationTabVisible by remember { mutableStateOf(true) }
         var isUserDeclarationTabVisible by remember { mutableStateOf(true) }
         var isManPowerTabVisible by remember { mutableStateOf(true) }
+        var isAllTabsExpanded by remember { mutableStateOf(true) }
         val coroutineScope = rememberCoroutineScope()
         val itemSize = 50.dp
         val density = LocalDensity.current.density
@@ -96,12 +98,22 @@ fun DeltaFourUI()
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            CollapseButton(buttonText = "Collapse All") {}
+            CollapseButton(if (isAllTabsExpanded) AppStrings.COLLAPSE_ALL else AppStrings.EXPAND_ALL,if(isAllTabsExpanded) R.drawable.minus_circle_outlined else R.drawable.add_circle) {
+
+                    isWorkSummaryTabVisible = !isAllTabsExpanded
+                    isGeneralGuidelinesTabVisible = !isAllTabsExpanded
+                    isPPEsTabVisible = !isAllTabsExpanded
+                    isIsolationTabVisible = !isAllTabsExpanded
+                    isUserDeclarationTabVisible = !isAllTabsExpanded
+                    isManPowerTabVisible = !isAllTabsExpanded
+                    isAllTabsExpanded = !isAllTabsExpanded
+
+            }
         }
 
         LazyColumn(state = scrollState) {
             item {
-                groupTitleWithSubTitle(title = "Work Summary", subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.WORK_SUMMARY_TITLE, subTitleString = "", fontSize = 10.sp)
                 {
                     isWorkSummaryTabVisible = !isWorkSummaryTabVisible
                 }
@@ -113,7 +125,7 @@ fun DeltaFourUI()
 //
 
             item {
-                groupTitleWithSubTitle(title = "General Guidelines", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.GENERAL_GUIDELINES_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
                 {
                     isGeneralGuidelinesTabVisible = !isGeneralGuidelinesTabVisible
                 }
@@ -124,7 +136,7 @@ fun DeltaFourUI()
             }
 
             item {
-                groupTitleWithSubTitle(title = "PPEs Selection", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.PPE_SELECTION_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
                 {
                         isPPEsTabVisible = !isPPEsTabVisible
                 }
@@ -137,7 +149,7 @@ fun DeltaFourUI()
 
 
             item {
-                groupTitleWithSubTitle(title = "PART 2: Isolation Details", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.ISOLATION_DETAILS_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
                 {
                     isIsolationTabVisible = !isIsolationTabVisible
                 }
@@ -148,7 +160,8 @@ fun DeltaFourUI()
             }
 
             item {
-                groupTitleWithSubTitle(title = "PART 3: User Declaration", subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.USER_DECLARATION_TITLE, subTitleString = "", fontSize = 10.sp)
+
                 {
                         isUserDeclarationTabVisible = !isUserDeclarationTabVisible
                 }
@@ -160,7 +173,7 @@ fun DeltaFourUI()
             }
 
             item {
-                groupTitleWithSubTitle(title = "Manpower Details", subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(title = AppStrings.MANPOWER_DETAILS_TITLE, subTitleString = "", fontSize = 10.sp)
                 {
                         isManPowerTabVisible = !isManPowerTabVisible
                 }
@@ -195,7 +208,7 @@ fun DeltaFourUI()
                 }
             }
             item {
-                checkBoxComposeView(title = "Save it to auto-fill", textColor = Color.Black,15.sp)
+                checkBoxComposeView(title = AppStrings.SAVE_TO_AUTO_FILL, textColor = Color.Black,15.sp)
             }
 
             item {
