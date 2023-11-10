@@ -1,6 +1,7 @@
 package github.kunalgharate.deltafourapp.compose
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +27,7 @@ import github.kunalgharate.deltafourapp.ui.theme.topBackground
 
 
 @Composable
-fun groupTitleWithSubTitle(title:String,subTitleString:String,fontSize: TextUnit) {
+fun groupTitleWithSubTitle(title:String,subTitleString:String,fontSize: TextUnit, onIconClick: () -> Unit) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,6 +62,9 @@ fun groupTitleWithSubTitle(title:String,subTitleString:String,fontSize: TextUnit
                     modifier = Modifier
                         .weight(0.2f)
                         .fillMaxWidth()
+                        .clickable{
+                            onIconClick()
+                        }
                 )
 
 
@@ -78,5 +82,5 @@ fun groupTitleWithSubTitle(title:String,subTitleString:String,fontSize: TextUnit
 @Preview
 @Composable
 fun previewGroupTitleWithSubTitle() {
-    groupTitleWithSubTitle(title = "Hello", subTitleString = "test", fontSize = 10.sp)
+    groupTitleWithSubTitle(title = "Hello", subTitleString = "test", fontSize = 10.sp,{})
 }

@@ -1,6 +1,7 @@
 package github.kunalgharate.deltafourapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +45,7 @@ import github.kunalgharate.deltafourapp.compose.CollapseButton
 import github.kunalgharate.deltafourapp.compose.GeneralTab
 import github.kunalgharate.deltafourapp.compose.IsolationDetailPage
 import github.kunalgharate.deltafourapp.compose.ManPowerView
+import github.kunalgharate.deltafourapp.compose.PpeSelectionView
 import github.kunalgharate.deltafourapp.compose.UserDeclarationView
 import github.kunalgharate.deltafourapp.compose.checkBoxComposeView
 import github.kunalgharate.deltafourapp.compose.groupTitleWithSubTitle
@@ -75,6 +78,12 @@ fun DeltaFourUI()
 
     {
         var scrollState by remember { mutableStateOf(LazyListState()) }
+        var isWorkSummaryTabVisible by remember { mutableStateOf(true) }
+        var isGeneralGuidelinesTabVisible by remember { mutableStateOf(true) }
+        var isPPEsTabVisible by remember { mutableStateOf(true) }
+        var isIsolationTabVisible by remember { mutableStateOf(true) }
+        var isUserDeclarationTabVisible by remember { mutableStateOf(true) }
+        var isManPowerTabVisible by remember { mutableStateOf(true) }
         val coroutineScope = rememberCoroutineScope()
         val itemSize = 50.dp
         val density = LocalDensity.current.density
@@ -92,46 +101,74 @@ fun DeltaFourUI()
 
         LazyColumn(state = scrollState) {
             item {
-                parentTitle("Work Summary")
+                groupTitleWithSubTitle(title = "Work Summary", subTitleString = "", fontSize = 10.sp)
+                {
+                    isWorkSummaryTabVisible = !isWorkSummaryTabVisible
+                }
+
+                if (isWorkSummaryTabVisible) {
+                    WorkSummaryTab()
+                }
             }
-            item {
-                WorkSummaryTab()
-            }
+//
 
             item {
                 groupTitleWithSubTitle(title = "General Guidelines", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
-            }
-            item {
-               GeneralTab()
+                {
+                    isGeneralGuidelinesTabVisible = !isGeneralGuidelinesTabVisible
+                }
+
+                if (isGeneralGuidelinesTabVisible) {
+                    GeneralTab()
+                }
             }
 
             item {
                 groupTitleWithSubTitle(title = "PPEs Selection", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
+                {
+                        isPPEsTabVisible = !isPPEsTabVisible
+                }
+                if (isPPEsTabVisible)
+                {
+                    PpeSelectionView()
+                }
             }
 
-            item {
-               previewPpeSelectionView()
-            }
+
 
             item {
                 groupTitleWithSubTitle(title = "PART 2: Isolation Details", subTitleString = "(Tick all applicable fields)", fontSize = 10.sp)
+                {
+                    isIsolationTabVisible = !isIsolationTabVisible
+                }
+                if (isIsolationTabVisible)
+                {
+                    IsolationDetailPage()
+                }
             }
 
-            item {
-              IsolationDetailPage()
-            }
             item {
                 groupTitleWithSubTitle(title = "PART 3: User Declaration", subTitleString = "", fontSize = 10.sp)
+                {
+                        isUserDeclarationTabVisible = !isUserDeclarationTabVisible
+                }
+
+                if(isUserDeclarationTabVisible)
+                {
+                    UserDeclarationView()
+                }
             }
 
             item {
-               UserDeclarationView()
-            }
-            item {
                 groupTitleWithSubTitle(title = "Manpower Details", subTitleString = "", fontSize = 10.sp)
-            }
-            item {
-                ManPowerView()
+                {
+                        isManPowerTabVisible = !isManPowerTabVisible
+                }
+
+                if(isManPowerTabVisible)
+                {
+                    ManPowerView()
+                }
             }
 
             item {
@@ -144,7 +181,7 @@ fun DeltaFourUI()
                             coroutineScope.launch {
                                 scrollState.animateScrollToItem(index = 0)
                             }
-                    }
+                        }
                 ) {
                     // Your existing content
                     // ...
