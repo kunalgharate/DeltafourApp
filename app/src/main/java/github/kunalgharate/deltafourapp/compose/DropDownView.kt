@@ -94,14 +94,17 @@ fun dropDownMenu(title:String) {
             workItems.forEachIndexed { index, label ->
                 DropdownMenuItem(text = { Text(text = label.name , modifier =
                 Modifier.padding(10.dp))
-                    if (index < workItems.size - 1) {
-                        Divider(color = Color.LightGray, thickness = .5.dp)
-                    }
+//                    if (index < workItems.size - 1) {
+//                        Divider(color = Color.LightGray, thickness = .5.dp)
+//                    }
                 }, onClick = {
                     selectedText = label.name
                     expanded = false
 
                 })
+                if (index < workItems.size - 1) {
+                    Divider(color = Color.LightGray, thickness = .5.dp)
+                }
             }
         }
 

@@ -115,14 +115,14 @@ fun dropDownWithImageView(title:String) {
                         )
 
                     }
-                    if (index < workItems.size - 1) {
-                        Divider(color = Color.LightGray, thickness = .5.dp)
-                    }
                 }, onClick = {
                     selectedText = label.name
                     expanded = false
 
                 })
+                if (index < workItems.size - 1) {
+                    Divider(color = Color.LightGray, thickness = .5.dp)
+                }
             }
         }
     }
