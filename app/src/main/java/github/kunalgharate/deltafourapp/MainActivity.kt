@@ -1,15 +1,20 @@
 package github.kunalgharate.deltafourapp
 
 import android.os.Bundle
-import android.widget.Toast
+import android.os.WorkSource
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,31 +32,27 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import github.kunalgharate.deltafourapp.compose.parentTitle
-import github.kunalgharate.deltafourapp.compose.WorkSummaryTab
 import github.kunalgharate.deltafourapp.compose.CollapseButton
 import github.kunalgharate.deltafourapp.compose.GeneralTab
 import github.kunalgharate.deltafourapp.compose.IsolationDetailPage
 import github.kunalgharate.deltafourapp.compose.ManPowerView
 import github.kunalgharate.deltafourapp.compose.PpeSelectionView
 import github.kunalgharate.deltafourapp.compose.UserDeclarationView
+import github.kunalgharate.deltafourapp.compose.WorkSummaryTab
 import github.kunalgharate.deltafourapp.compose.checkBoxComposeView
 import github.kunalgharate.deltafourapp.compose.groupTitleWithSubTitle
-import github.kunalgharate.deltafourapp.compose.previewPpeSelectionView
-import github.kunalgharate.deltafourapp.compose.subTitle
 import github.kunalgharate.deltafourapp.compose.topBar
 import github.kunalgharate.deltafourapp.constants.AppStrings
 import github.kunalgharate.deltafourapp.ui.theme.DeltafourAppTheme
 import github.kunalgharate.deltafourapp.ui.theme.topBackground
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -63,19 +60,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DeltafourAppTheme {
-                    DeltaFourUI()
-                }
+                DeltaFourUI()
             }
         }
     }
-
+}
 
 
 @Composable
-fun DeltaFourUI()
-{
-    Column(verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(color = Color.White))
+fun DeltaFourUI() {
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.background(color = Color.White)
+    )
 
     {
         var scrollState by remember { mutableStateOf(LazyListState()) }
@@ -98,19 +96,22 @@ fun DeltaFourUI()
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            CollapseButton(if (isAllTabsExpanded) AppStrings.COLLAPSE_ALL else AppStrings.EXPAND_ALL,if(isAllTabsExpanded) R.drawable.minus_circle_outlined else R.drawable.add_circle) {
+            CollapseButton(
+                if (isAllTabsExpanded) AppStrings.COLLAPSE_ALL else AppStrings.EXPAND_ALL,
+                if (isAllTabsExpanded) R.drawable.minus_circle_outlined else R.drawable.add_circle
+            ) {
 
-                    isWorkSummaryTabVisible = !isAllTabsExpanded
-                    isGeneralGuidelinesTabVisible = !isAllTabsExpanded
-                    isPPEsTabVisible = !isAllTabsExpanded
-                    isIsolationTabVisible = !isAllTabsExpanded
-                    isUserDeclarationTabVisible = !isAllTabsExpanded
-                    isManPowerTabVisible = !isAllTabsExpanded
-                    isAllTabsExpanded = !isAllTabsExpanded
+                isWorkSummaryTabVisible = !isAllTabsExpanded
+                isGeneralGuidelinesTabVisible = !isAllTabsExpanded
+                isPPEsTabVisible = !isAllTabsExpanded
+                isIsolationTabVisible = !isAllTabsExpanded
+                isUserDeclarationTabVisible = !isAllTabsExpanded
+                isManPowerTabVisible = !isAllTabsExpanded
+                isAllTabsExpanded = !isAllTabsExpanded
 
             }
 
-           isAllTabsExpanded =
+            isAllTabsExpanded =
                 isWorkSummaryTabVisible &&
                         isGeneralGuidelinesTabVisible &&
                         isPPEsTabVisible &&
@@ -120,20 +121,37 @@ fun DeltaFourUI()
         }
 
         LazyColumn(state = scrollState) {
+
+
             item {
-                groupTitleWithSubTitle(title = AppStrings.WORK_SUMMARY_TITLE, subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.WORK_SUMMARY_TITLE,
+                    subTitleString = "",
+                    fontSize = 10.sp
+                )
                 {
                     isWorkSummaryTabVisible = !isWorkSummaryTabVisible
                 }
 
-                if (isWorkSummaryTabVisible) {
+                AnimatedWorkSummaryTab(isTabVisible = isWorkSummaryTabVisible)
+                {
                     WorkSummaryTab()
+
+
                 }
+
+//                if (isWorkSummaryTabVisible) {
+//                    WorkSummaryTab()
+//                }
             }
-//
+
 
             item {
-                groupTitleWithSubTitle(title = AppStrings.GENERAL_GUIDELINES_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.GENERAL_GUIDELINES_TITLE,
+                    subTitleString = AppStrings.MANDATORY_FIELDS,
+                    fontSize = 10.sp
+                )
                 {
                     isGeneralGuidelinesTabVisible = !isGeneralGuidelinesTabVisible
                 }
@@ -144,12 +162,15 @@ fun DeltaFourUI()
             }
 
             item {
-                groupTitleWithSubTitle(title = AppStrings.PPE_SELECTION_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.PPE_SELECTION_TITLE,
+                    subTitleString = AppStrings.MANDATORY_FIELDS,
+                    fontSize = 10.sp
+                )
                 {
-                        isPPEsTabVisible = !isPPEsTabVisible
+                    isPPEsTabVisible = !isPPEsTabVisible
                 }
-                if (isPPEsTabVisible)
-                {
+                if (isPPEsTabVisible) {
                     PpeSelectionView()
                 }
             }
@@ -157,37 +178,46 @@ fun DeltaFourUI()
 
 
             item {
-                groupTitleWithSubTitle(title = AppStrings.ISOLATION_DETAILS_TITLE, subTitleString = AppStrings.MANDATORY_FIELDS, fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.ISOLATION_DETAILS_TITLE,
+                    subTitleString = AppStrings.MANDATORY_FIELDS,
+                    fontSize = 10.sp
+                )
                 {
                     isIsolationTabVisible = !isIsolationTabVisible
                 }
-                if (isIsolationTabVisible)
-                {
+                if (isIsolationTabVisible) {
                     IsolationDetailPage()
                 }
             }
 
             item {
-                groupTitleWithSubTitle(title = AppStrings.USER_DECLARATION_TITLE, subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.USER_DECLARATION_TITLE,
+                    subTitleString = "",
+                    fontSize = 10.sp
+                )
 
                 {
-                        isUserDeclarationTabVisible = !isUserDeclarationTabVisible
+                    isUserDeclarationTabVisible = !isUserDeclarationTabVisible
                 }
 
-                if(isUserDeclarationTabVisible)
-                {
+                if (isUserDeclarationTabVisible) {
                     UserDeclarationView()
                 }
             }
 
             item {
-                groupTitleWithSubTitle(title = AppStrings.MANPOWER_DETAILS_TITLE, subTitleString = "", fontSize = 10.sp)
+                groupTitleWithSubTitle(
+                    title = AppStrings.MANPOWER_DETAILS_TITLE,
+                    subTitleString = "",
+                    fontSize = 10.sp
+                )
                 {
-                        isManPowerTabVisible = !isManPowerTabVisible
+                    isManPowerTabVisible = !isManPowerTabVisible
                 }
 
-                if(isManPowerTabVisible)
-                {
+                if (isManPowerTabVisible) {
                     ManPowerView()
                 }
             }
@@ -216,7 +246,11 @@ fun DeltaFourUI()
                 }
             }
             item {
-                checkBoxComposeView(title = AppStrings.SAVE_TO_AUTO_FILL, textColor = Color.Black,15.sp)
+                checkBoxComposeView(
+                    title = AppStrings.SAVE_TO_AUTO_FILL,
+                    textColor = Color.Black,
+                    15.sp
+                )
             }
 
             item {
@@ -240,15 +274,37 @@ fun DeltaFourUI()
         }
 
 
-    // squareButtonWithIconAndText(buttonText = "Collapse All") {}
-
     }
 }
 
 @Composable
+fun  AnimatedWorkSummaryTab(
+    isTabVisible: Boolean,
+    content: @Composable (Boolean) -> Unit
+) {
+
+    val composableLambda: @Composable (Boolean) -> Unit = { isVisible ->
+        content(isVisible)
+    }
+    AnimatedVisibility(
+        visible = isTabVisible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = tween(300)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { it },
+            animationSpec = tween(300)
+        )
+    ) {
+        composableLambda(isTabVisible)
+    }
+}
+
+
+@Composable
 @Preview(showSystemUi = true, showBackground = true)
-fun previewDeltaFourUI()
-{
+fun previewDeltaFourUI() {
     DeltaFourUI()
 
 }
