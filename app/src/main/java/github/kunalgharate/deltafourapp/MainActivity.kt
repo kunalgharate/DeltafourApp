@@ -80,12 +80,12 @@ fun DeltaFourUI()
     {
         var scrollState by remember { mutableStateOf(LazyListState()) }
         var isWorkSummaryTabVisible by remember { mutableStateOf(true) }
-        var isGeneralGuidelinesTabVisible by remember { mutableStateOf(true) }
-        var isPPEsTabVisible by remember { mutableStateOf(true) }
-        var isIsolationTabVisible by remember { mutableStateOf(true) }
-        var isUserDeclarationTabVisible by remember { mutableStateOf(true) }
-        var isManPowerTabVisible by remember { mutableStateOf(true) }
-        var isAllTabsExpanded by remember { mutableStateOf(true) }
+        var isGeneralGuidelinesTabVisible by remember { mutableStateOf(false) }
+        var isPPEsTabVisible by remember { mutableStateOf(false) }
+        var isIsolationTabVisible by remember { mutableStateOf(false) }
+        var isUserDeclarationTabVisible by remember { mutableStateOf(false) }
+        var isManPowerTabVisible by remember { mutableStateOf(false) }
+        var isAllTabsExpanded by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
         val itemSize = 50.dp
         val density = LocalDensity.current.density
@@ -109,6 +109,14 @@ fun DeltaFourUI()
                     isAllTabsExpanded = !isAllTabsExpanded
 
             }
+
+           isAllTabsExpanded =
+                isWorkSummaryTabVisible &&
+                        isGeneralGuidelinesTabVisible &&
+                        isPPEsTabVisible &&
+                        isIsolationTabVisible &&
+                        isUserDeclarationTabVisible &&
+                        isManPowerTabVisible
         }
 
         LazyColumn(state = scrollState) {
